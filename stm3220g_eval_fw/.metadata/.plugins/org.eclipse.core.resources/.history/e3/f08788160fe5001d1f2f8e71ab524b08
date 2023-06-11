@@ -1,0 +1,222 @@
+/*
+ * uart.c
+ *
+ *  Created on: 2023. 4. 25.
+ *      Author: kjkim
+ */
+
+
+#include "uart.h"
+#include "cdc.h"
+
+static bool is_open[UART_MAX_CH];
+
+UART_HandleTypeDef huart3;
+
+
+bool uartInit(void)
+{
+  bool ret = true;
+
+  for(uint8_t i=0;i<UART_MAX_CH;i++)
+  {
+    is_open[i] = false;
+  }
+
+  return ret;
+}
+
+bool uartOpen(uint8_t ch, uint32_t baud)
+{
+  bool ret = false;
+
+  switch(ch)
+  {
+    case _DEF_UART1:
+      is_open[ch] = true;
+
+      ret = true;
+      break;
+    case _DEF_UART2:
+      huart3.Instance         = USART3;
+      huart3.Init.BaudRate    = baud;
+      huart3.Init.WordLength  = UART_WORDLENGTH_8B;
+      huart3.Init.StopBits    = UART_STOPBITS_1;
+      huart3.Init.Parity      = UART_PARITY_NONE;
+      huart3.Init.Mode        = UART_MODE_TX_RX;
+      huart3.Init.HwFlowCtl   = UART_HWCONTROL_NONE;
+      huart3.Init.OverSampling = UART_OVERSAMPLING_16;
+      if (HAL_UART_Init(&huart3) != HAL_OK)
+      {
+        ret = false;
+      }
+      else
+      {
+        is_open[ch] = true;
+        ret = true;
+      }
+      break;
+  }
+
+  return ret;
+}
+
+uint32_t uartAvailable(uint8_t ch)
+{
+  uint32_t ret = 0;
+
+  switch(ch)
+  {
+    case _DEF_UART1:
+      ret = cdcAvailable();
+      break;
+
+    case _DEF_UART2:
+      break;
+
+    default:break;
+  }
+
+  return ret;
+}
+
+uint8_t uartRead(uint8_t ch)
+{
+  uint8_t ret = 0;
+
+  switch(ch)
+  {
+    case _DEF_UART1:
+      ret = cdcRead();
+      break;
+
+    case _DEF_UART2:
+      break;
+
+    default:break;
+  }
+
+  return ret;
+}
+
+uint32_t uartWrite(uint8_t ch, uint8_t *p_data, uint32_t length)
+{
+  uint32_t ret = 0;
+  HAL_StatusTypeDef status;
+  switch(ch)
+  {
+    case _DEF_UART1:
+      ret = cdcWrite(p_data, length);
+      break;
+
+    case _DEF_UART2:
+      status = HAL_UART_Transmit(&huart3, p_data, length, 100);
+      if(status == HAL_OK)
+      {
+        ret = length;
+      }
+      break;
+
+    default:break;
+  }
+  return ret;
+}
+
+uint32_t uartPrintf(uint8_t ch, char *fmt, ...)
+{
+  char buf[256];
+  va_list args;
+  int len;
+  uint32_t ret;
+
+  va_start(args, fmt);
+  len = vsnprintf(buf, 256, fmt, args);
+
+  ret = uartWrite(ch, (uint8_t *)buf, len);
+
+  va_end(args);
+
+  return ret;
+}
+
+uint32_t uartGetBaud(uint8_t ch)
+{
+  uint32_t ret = 0;
+
+  switch(ch)
+  {
+    case _DEF_UART1:
+      ret = cdcGetBaud();
+      break;
+
+    case _DEF_UART2:
+      break;
+
+    default:break;
+  }
+
+
+  return ret;
+}
+
+
+
+
+
+void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
+{
+
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+  if(uartHandle->Instance==USART3)
+  {
+  /* USER CODE BEGIN USART3_MspInit 0 */
+
+  /* USER CODE END USART3_MspInit 0 */
+    /* USART3 clock enable */
+    __HAL_RCC_USART3_CLK_ENABLE();
+
+    __HAL_RCC_GPIOC_CLK_ENABLE();
+    /**USART3 GPIO Configuration
+    PC11     ------> USART3_RX
+    PC10     ------> USART3_TX
+    */
+    GPIO_InitStruct.Pin = GPIO_PIN_11|GPIO_PIN_10;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    GPIO_InitStruct.Alternate = GPIO_AF7_USART3;
+    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+    /* USART3 interrupt Init */
+    HAL_NVIC_SetPriority(USART3_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(USART3_IRQn);
+  /* USER CODE BEGIN USART3_MspInit 1 */
+
+  /* USER CODE END USART3_MspInit 1 */
+  }
+}
+
+void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
+{
+
+  if(uartHandle->Instance==USART3)
+  {
+  /* USER CODE BEGIN USART3_MspDeInit 0 */
+
+  /* USER CODE END USART3_MspDeInit 0 */
+    /* Peripheral clock disable */
+    __HAL_RCC_USART3_CLK_DISABLE();
+
+    /**USART3 GPIO Configuration
+    PC11     ------> USART3_RX
+    PC10     ------> USART3_TX
+    */
+    HAL_GPIO_DeInit(GPIOC, GPIO_PIN_11|GPIO_PIN_10);
+
+    /* USART3 interrupt Deinit */
+    HAL_NVIC_DisableIRQ(USART3_IRQn);
+  /* USER CODE BEGIN USART3_MspDeInit 1 */
+
+  /* USER CODE END USART3_MspDeInit 1 */
+  }
+}

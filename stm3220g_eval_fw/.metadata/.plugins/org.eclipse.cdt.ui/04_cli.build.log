@@ -1,0 +1,10 @@
+00:49:14 **** Incremental Build of configuration Debug for project 04_cli ****
+make all 
+arm-none-eabi-size   04_cli.elf 
+   text	   data	    bss	    dec	    hex	filename
+  62196	    904	   7800	  70900	  114f4	04_cli.elf
+Finished building: default.size.stdout
+ 
+
+00:49:15 Build Finished. 0 errors, 0 warnings. (took 529ms)
+
