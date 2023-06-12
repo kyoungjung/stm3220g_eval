@@ -8,7 +8,7 @@
 
 #include "hwtimer.h"
 
-#define HWTIMER_MAX_CH          4
+#define HWTIMER_MAX_CH          1
 
 #define HWTIMER_TIMER1          0
 #define HWTIMER_TIMER2          1
@@ -42,32 +42,29 @@ typedef struct
 static hwtimer_index_t      hwtimer_index[HW_TIMER_MAX_CH] =
     {
         {HWTIMER_TIMER1, HWTIMER_CH1, HAL_TIM_ACTIVE_CHANNEL_1},
-        {HWTIMER_TIMER2, HWTIMER_CH2, HAL_TIM_ACTIVE_CHANNEL_2},
-        {HWTIMER_TIMER3, HWTIMER_CH3, HAL_TIM_ACTIVE_CHANNEL_3},
-        {HWTIMER_TIMER4, HWTIMER_CH4, HAL_TIM_ACTIVE_CHANNEL_4}
+        {HWTIMER_TIMER1, HWTIMER_CH2, HAL_TIM_ACTIVE_CHANNEL_2},
+        {HWTIMER_TIMER1, HWTIMER_CH3, HAL_TIM_ACTIVE_CHANNEL_3},
+        {HWTIMER_TIMER1, HWTIMER_CH4, HAL_TIM_ACTIVE_CHANNEL_4}
     };
 
-static hwtimer_tbl_t          hwtimer_tbl[TIMER_MAX_CH];
+static hwtimer_tbl_t          hwtimer_tbl[HWTIMER_MAX_CH];
 
 bool timerInit(void)
 {
   bool ret = true;
 
-
   hwtimer_tbl[HWTIMER_TIMER1].freq                      = 1000;
-  hwtimer_tbl[HWTIMER_TIMER2].freq                      = 1000;
-  hwtimer_tbl[HWTIMER_TIMER3].freq                      = 1000;
+  hwtimer_tbl[HWTIMER_TIMER1].hTIM.Instance             = TIM4;
+  hwtimer_tbl[HWTIMER_TIMER1].hTIM.Init.Prescaler       =  ((uint32_t)(SystemCoreClock / 2) / hwtimer_tbl[HWTIMER_TIMER1].freq) - 1;
+  hwtimer_tbl[HWTIMER_TIMER1].hTIM.Init.ClockDivision      = TIM_CLOCKDIVISION_DIV1;
+  hwtimer_tbl[HWTIMER_TIMER1].hTIM.Init.CounterMode        = TIM_COUNTERMODE_UP;
+  hwtimer_tbl[HWTIMER_TIMER1].hTIM.Init.RepetitionCounter  = 0;
+  hwtimer_tbl[HWTIMER_TIMER1].hTIM.Init.AutoReloadPreload  = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  hwtimer_tbl[HWTIMER_TIMER1].p_func[0]       = NULL;
+  hwtimer_tbl[HWTIMER_TIMER1].p_func[1]       = NULL;
+  hwtimer_tbl[HWTIMER_TIMER1].p_func[2]       = NULL;
+  hwtimer_tbl[HWTIMER_TIMER1].p_func[3]       = NULL;
 
-  for(int i=0;i<HWTIMER_MAX_CH-1;i++)
-  {
-    hwtimer_tbl[i].hTIM.Instance             = TIM4;
-    hwtimer_tbl[i].hTIM.Init.Prescaler       =  ((uint32_t)(SystemCoreClock / 2) / hwtimer_tbl[i].freq) - 1;
-    hwtimer_tbl[i].hTIM.Init.ClockDivision      = TIM_CLOCKDIVISION_DIV1;
-    hwtimer_tbl[i].hTIM.Init.CounterMode        = TIM_COUNTERMODE_UP;
-    hwtimer_tbl[i].hTIM.Init.RepetitionCounter  = 0;
-    hwtimer_tbl[i].hTIM.Init.AutoReloadPreload  = TIM_AUTORELOAD_PRELOAD_DISABLE;
-    hwtimer_tbl[i].p_func[i]       = NULL;
-  }
   return ret;
 }
 
@@ -112,6 +109,20 @@ bool timerSetPeriod(uint8_t ch, uint32_t period_data)
   }
 
   p_timer->hTIM.Init.Period = period - 1;
+  /*
+  switch(ch)
+  {
+    case _DEF_HWTIMER1 :
+      p_timer->hTIM.Instance->CCR1 = period - 1;
+      break;
+    case _DEF_HWTIMER2 :
+      p_timer->hTIM.Instance->CCR2 = period - 1;
+      break;
+    case _DEF_HWTIMER3 :
+      p_timer->hTIM.Instance->CCR3 = period - 1;
+      break;
+  }
+  */
 
   return ret;
 }
@@ -233,19 +244,7 @@ void timerCallback(TIM_HandleTypeDef *htim)
 
 void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 {
-  if(htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)
-  {
-    timerCallback(htim);
-  }
-  if(htim->Channel == HAL_TIM_ACTIVE_CHANNEL_2)
-  {
-    timerCallback(htim);
-  }
-  if(htim->Channel == HAL_TIM_ACTIVE_CHANNEL_3)
-  {
-    timerCallback(htim);
-  }
-
+  timerCallback(htim);
 }
 
 void HAL_TIM_OC_MspInit(TIM_HandleTypeDef* tim_ocHandle)
