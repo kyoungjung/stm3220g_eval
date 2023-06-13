@@ -1,10 +1,10 @@
-00:37:19 **** Incremental Build of configuration Debug for project 07_hw_timer ****
+00:29:34 **** Incremental Build of configuration Debug for project 07_hw_timer ****
 make all 
 arm-none-eabi-size   07_hw_timer.elf 
    text	   data	    bss	    dec	    hex	filename
-  69044	   1056	   8032	  78132	  13134	07_hw_timer.elf
+  69228	   1056	   8032	  78316	  131ec	07_hw_timer.elf
 Finished building: default.size.stdout
  
 
-00:37:20 Build Finished. 0 errors, 0 warnings. (took 387ms)
+00:29:35 Build Finished. 0 errors, 0 warnings. (took 389ms)
 

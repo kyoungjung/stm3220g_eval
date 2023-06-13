@@ -97,7 +97,7 @@ bool timerSetPeriod(uint8_t ch, uint32_t period_data)
   if(ch >= TIMER_MAX_CH)    return false;
 
   p_timer = &hwtimer_tbl[hwtimer_index[ch].number];
-
+/*
   if(p_timer->freq == 1000)
   {
     period = period_data / 1000;
@@ -107,22 +107,23 @@ bool timerSetPeriod(uint8_t ch, uint32_t period_data)
       period = 1;
     }
   }
+*/
+  p_timer->hTIM.Init.Period = 1000 - 1;
 
-  p_timer->hTIM.Init.Period = period - 1;
-  /*
+
   switch(ch)
   {
     case _DEF_HWTIMER1 :
-      p_timer->hTIM.Instance->CCR1 = period - 1;
+      p_timer->hTIM.Instance->CCR1 = 100 - 1;
       break;
     case _DEF_HWTIMER2 :
-      p_timer->hTIM.Instance->CCR2 = period - 1;
+      p_timer->hTIM.Instance->CCR2 = 300 - 1;
       break;
     case _DEF_HWTIMER3 :
-      p_timer->hTIM.Instance->CCR3 = period - 1;
+      p_timer->hTIM.Instance->CCR3 = 500 - 1;
       break;
   }
-  */
+
 
   return ret;
 }
@@ -213,6 +214,11 @@ bool timerStart(uint8_t ch)
     ret = false;
   }
 
+  if(HAL_TIM_Base_Start_IT(&p_timer->hTIM) != HAL_OK)
+  {
+    ret = false;
+  }
+
   if(HAL_TIM_OC_Start_IT(&p_timer->hTIM, timer_sub_ch) != HAL_OK)
   {
     ret = false;
@@ -247,14 +253,30 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
   timerCallback(htim);
 }
 
+void HAL_TIM_Base_MspInit(TIM_HandleTypeDef *htim)
+{
+  if (htim->Instance == hwtimer_tbl[HWTIMER_TIMER1].hTIM.Instance )
+  {
+    __HAL_RCC_TIM4_CLK_ENABLE();
+
+    HAL_NVIC_SetPriority(TIM4_IRQn, 15, 0);
+    HAL_NVIC_EnableIRQ(TIM4_IRQn);
+  }
+}
+
+void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef *htim)
+{
+  if (htim->Instance == hwtimer_tbl[HWTIMER_TIMER1].hTIM.Instance)
+  {
+    HAL_NVIC_DisableIRQ(TIM4_IRQn);
+  }
+}
+
 void HAL_TIM_OC_MspInit(TIM_HandleTypeDef* tim_ocHandle)
 {
 
   if(tim_ocHandle->Instance==TIM4)
   {
-  /* USER CODE BEGIN TIM4_MspInit 0 */
-
-  /* USER CODE END TIM4_MspInit 0 */
     /* TIM4 clock enable */
     __HAL_RCC_TIM4_CLK_ENABLE();
 
@@ -290,4 +312,6 @@ void TIM4_IRQHandler(void)
 {
   HAL_TIM_IRQHandler(&hwtimer_tbl[HWTIMER_TIMER1].hTIM);
 }
+
+
 
