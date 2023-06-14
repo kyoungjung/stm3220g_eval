@@ -1,0 +1,13 @@
+/*
+ * cmdif.h
+ *
+ *  Created on: 2023. 6. 14.
+ *      Author: kjkim
+ */
+
+#ifndef SRC_COMMON_INC_CMDIF_H_
+#define SRC_COMMON_INC_CMDIF_H_
+
+
+
+#endif /* SRC_COMMON_INC_CMDIF_H_ */
