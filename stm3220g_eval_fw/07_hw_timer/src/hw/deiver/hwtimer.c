@@ -97,7 +97,7 @@ bool timerSetPeriod(uint8_t ch, uint32_t period_data)
   if(ch >= TIMER_MAX_CH)    return false;
 
   p_timer = &hwtimer_tbl[hwtimer_index[ch].number];
-/*
+
   if(p_timer->freq == 1000)
   {
     period = period_data / 1000;
@@ -107,23 +107,8 @@ bool timerSetPeriod(uint8_t ch, uint32_t period_data)
       period = 1;
     }
   }
-*/
-  p_timer->hTIM.Init.Period = 1000 - 1;
 
-
-  switch(ch)
-  {
-    case _DEF_HWTIMER1 :
-      p_timer->hTIM.Instance->CCR1 = 100 - 1;
-      break;
-    case _DEF_HWTIMER2 :
-      p_timer->hTIM.Instance->CCR2 = 300 - 1;
-      break;
-    case _DEF_HWTIMER3 :
-      p_timer->hTIM.Instance->CCR3 = 500 - 1;
-      break;
-  }
-
+  p_timer->hTIM.Init.Period = period - 1;
 
   return ret;
 }
