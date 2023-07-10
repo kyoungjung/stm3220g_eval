@@ -1,0 +1,130 @@
+/*
+ * cmdif.c
+ *
+ *  Created on: 2023. 6. 14.
+ *      Author: kjkim
+ */
+
+/**
+ * @ 명령어 처리 함수 구현
+ */
+
+#include "cmdif.h"
+
+
+//명령어와 명령어에 따른 실행함수(함수포인터)가 정의된 구조체를 배열로 선언
+cmdif_cmd_node_t    cmdif_cmd_node[CMDIF_LIST_MAX];
+
+//명령행 문자열 관련 입력, 설정, 처리 관련 구조체 변수 선언
+cmdif_cmd_t   cmdif_cmd;
+
+static const chsr *delim = " \f\n\r\t\v";
+
+
+//지역 함수원형 선언
+void    cmdifResetBuffer(void);
+int     cmdifGetCmdString(char *s, int *count);
+uint8_t cmdifReadByte(char *p_data);
+
+int     parseCommandArgs(char *cmdline, char **argv);
+void    upperStr(char *Str);
+
+void    cmdifCmdExit(void);
+void    cmdifCmdShowList(void);
+void    cmdifCmdMemoryDump(void);
+void    cmdifCmdMemoryWrite32(void);
+
+
+
+/**
+ * @
+ */
+bool cmdifInit(void)
+{
+  bool ret = true;
+  uint32_t i;
+
+  cmdif_cmd.index       = 0;    //명령어 인덱스 초기화
+  cmdif_cmd.err_code    = 0;    //에러코드 초기화
+  cmdif_cmd.init        = true; //초기화 완료 플래그 셋
+  cmdif_cmd.node        = &cmdif_cmd_node[0]; //명령어와 명령어에 따른 실행함수(함수포인터)가 정의된 구조체의 포인터 초기화
+
+  for(i=0;i<CMDIF_LIST_MAX;i++)
+  {
+    cmdif_cmd.node[i].cmd_str[0]  = 0;      //
+    cmdif_cmd.node[i].cmd_func    = NULL;   //명령어(16개)에 따라 실행되는 함수포인터 null로 초기화
+  }
+
+  cmdifResetBuffer();
+
+  cmdifAdd("help", cmdifCmdShowList);    //help 입력하면 cmdifCmdShowList 함수 실행
+  cmdifAdd("exit", cmdifCmdExit);       //exti 입력하면 cmdifCmdExit 함수 실행
+
+  cmdifAdd("md", cmdifCmdMemoryDump);
+  cmdifAdd("mw32", cmdifCmdMemoryWrite32);
+}
+
+bool cmdifIsInit(void)
+{
+
+}
+
+void cmdifOpen(uint8_t ch, uint32_t baud)
+{
+
+}
+
+void cmdifAdd(const char *cmd_str, void (*(p_func)(void)))
+{
+
+}
+
+void cmdifMain(void)
+{
+
+}
+
+void cmdifLoop(void)
+{
+
+}
+
+void cmdifPrintf(const char *fmt, ...)
+{
+
+}
+
+void cmdifPrint(char *str)
+{
+
+}
+
+void cmdifPutCh(char data)
+{
+
+}
+
+uit8_t cmdifGetCh(void)
+{
+
+}
+
+uint32_t cmdifRxAvailable(void)
+{
+
+}
+
+bool cmdifHasString(char *p_str, uint8_t index)
+{
+
+}
+
+unsigned long cmdifGetParam(uint8_t index)
+{
+
+}
+
+uint32_t cmdifGetParamCnt(void)
+{
+
+}

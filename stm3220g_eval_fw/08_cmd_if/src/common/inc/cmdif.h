@@ -17,7 +17,7 @@
 typedef struct
 {
   int argc;       //입력 인자 갯수
-  char **argv;
+  char **argv;    //입력 인자...
 }cmdif_param_t;
 
 typedef struct
