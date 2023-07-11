@@ -7,6 +7,9 @@
 
 
 #include "button.h"
+#include "cmdif.h"
+
+void buttonCmdif(void);
 
 //GPIO_PinState HAL_GPIO_ReadPin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
 typedef struct
@@ -41,7 +44,48 @@ bool buttonInit(void)
     HAL_GPIO_Init(button_tbl[BUTTON_MAX_CH].port, &GPIO_InitStruct);
   }
 
+  //cmdifAdd("button", buttonCmdif);
+  cmdifAdd("button", buttonCmdif);
+
   return ret;
+}
+
+/**
+ * @ button 명령 입력되면 실행되는 함수
+ */
+void buttonCmdif(void)
+{
+  uint8_t number;
+  bool ret = true;
+
+  if(cmdifHasString("read", 0) == true)   //0번째 인덱스가 read 문자열인지??
+  {
+    number = (uint8_t)cmdifGetParam(1);
+
+    while(cmdifRxAvailable() == 0)
+    {
+      /*
+      cmdifPrintf("button pressed ch %d : %d, event : %d, time %d\r\n",
+                  number,
+                  buttonGetPressed(number),
+                  button))*/
+      cmdifPrintf("button pressed ch %d : %d\r\n",
+                        number,
+                        buttonGetPressed(number)
+                        );
+
+      delay(50);
+    }
+  }
+  else
+  {
+    ret = false;
+  }
+
+  if(ret != true)
+  {
+    cmdifPrintf("button read <0~9>\n");
+  }
 }
 
 bool buttonGetPressed(uint8_t ch)
@@ -66,3 +110,5 @@ bool buttonGetPressed(uint8_t ch)
 
   return ret;
 }
+
+

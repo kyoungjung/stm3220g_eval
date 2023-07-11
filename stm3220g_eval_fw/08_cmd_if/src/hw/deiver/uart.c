@@ -156,6 +156,11 @@ uint8_t uartRead(uint8_t ch)
   return ret;
 }
 
+void uartPutch(uint8_t ch, uint8_t data)
+{
+  uartWrite(ch, &data, 1);
+}
+
 uint32_t uartWrite(uint8_t ch, uint8_t *p_data, uint32_t length)
 {
   uint32_t ret = 0;
@@ -217,6 +222,8 @@ uint32_t uartGetBaud(uint8_t ch)
 
   return ret;
 }
+
+//uartPutch(cmdif_cmd.ch, data);
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {

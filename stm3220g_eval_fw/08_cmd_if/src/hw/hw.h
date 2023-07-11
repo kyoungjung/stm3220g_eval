@@ -16,6 +16,7 @@
 #include "flash.h"
 #include "button.h"
 #include "hwtimer.h"
+#include "cmdif.h"
 
 void hwInit(void);
 

@@ -17,6 +17,7 @@ void hwInit(void)
   uartInit();
   cdcInit();
   flashInit();
-  buttonInit();
   timerInit();
+  cmdifInit();
+  buttonInit();
 }
