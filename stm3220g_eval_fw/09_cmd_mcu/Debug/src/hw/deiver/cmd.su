@@ -1,0 +1,7 @@
+../src/hw/deiver/cmd.c:32:7:cmdInit	16	static
+../src/hw/deiver/cmd.c:43:7:cmdBegin	24	static
+../src/hw/deiver/cmd.c:59:6:cmdPutch	16	static
+../src/hw/deiver/cmd.c:68:7:cmdReceivePacket	32	static
+../src/hw/deiver/cmd.c:205:6:cmdSendResp	32	static
+../src/hw/deiver/cmd.c:266:7:cmdSendCmd	32	static
+../src/hw/deiver/cmd.c:318:6:cmdSendCmdRxResp	32	static

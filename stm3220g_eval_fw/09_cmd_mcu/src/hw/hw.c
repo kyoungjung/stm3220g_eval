@@ -20,4 +20,5 @@ void hwInit(void)
   timerInit();
   cmdifInit();
   buttonInit();
+  cmdInit(p_cmd)
 }

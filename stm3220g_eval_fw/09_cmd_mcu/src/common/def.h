@@ -38,4 +38,7 @@
 #define _DEF_HWTIMER3     2
 #define _DEF_HWTIMER4     3
 
+
+#define ERR_TIMEOUT       255
+
 #endif /* SRC_COMMON_DEF_H_ */

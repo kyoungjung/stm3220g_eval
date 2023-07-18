@@ -61,7 +61,7 @@ bool  cmdReceivePacket(cmd_t *p_cmd);
 /*
  * cmd packet 전송 함수
  */
-void  cmdSendCmd(cmd_t *p_cmd, uint8_t *p_data, uint32_t length);
+void  cmdSendCmd(cmd_t *p_cmd, uint8_t cmd, uint8_t *p_data, uint32_t length);
 /*
  * 응답 packet 전송함수
  */

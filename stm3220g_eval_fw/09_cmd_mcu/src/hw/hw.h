@@ -17,6 +17,7 @@
 #include "button.h"
 #include "hwtimer.h"
 #include "cmdif.h"
+#include "cmd.h"
 
 void hwInit(void);
 

@@ -198,15 +198,157 @@ bool  cmdReceivePacket(cmd_t *p_cmd)
 
   return ret;
 }
-/*
- * cmd packet 전송 함수
- */
-void  cmdSendCmd(cmd_t *p_cmd, uint8_t *p_data, uint32_t length);
+
 /*
  * 응답 packet 전송함수
  */
-void cmdSendResp(cmd_t *p_cmd, uint8_t err_code, uint8_t *p_data, uint32_t length);
+void cmdSendResp(cmd_t *p_cmd, uint8_t err_code, uint8_t *p_data, uint32_t length)
+{
+  uint32_t i;
+  uint8_t ch;
+  uint8_t check_sum = 0;
+  uint8_t data;
+
+  ch = p_cmd->ch;
+
+
+  //수신된 cmd를 다시 응답으로 송신해야 하므로
+  //tx packet 의 cmd 변수에 수신된 cmd를 저장한다.
+  p_cmd->tx_packet.cmd = p_cmd->rx_packetr.cmd;
+
+  //수신패킷에 따라 처리된 결과(에러코드)를 tx packet의 에러 변수에 저장한다.
+  p_cmd->tx_packet.error = err_code;
+
+  if(p_data != NULL)
+  {
+    //수신된 패킷 데이터 길이만큼 데이터를 tx packet의 data버퍼에 저장한다.
+    for(i=i;i<length;i++)
+    {
+      p_cmd->tx_packet.data[i] = p_data[i];
+    }
+  }
+  p_cmd->tx_packet.length = length;
+
+  //시리얼 프로토콜 규약에 맞게 바이트 단위로 응답한다.
+  cmdPutch(ch, CMD_STX);                          //stx 패킷 송신
+  cmdPutch(ch, p_cmd->tx_packet.cmd);             //cmd 패킷 송신
+  check_sum ^= p_cmd->tx_packet.cmd;              //cmd 패킷 부터 체크섬 계산 시작
+
+  cmdPutch(ch, p_cmd->tx_packet.error);           //error code 패킷 송신
+  check_sum ^= p_cmd->tx_packet.error;            //error code 체크섬 계산
+
+  data = p_cmd->tx_packet.length & 0xFF;          //tx packet low length값을 변수에 저장
+  cmdPutch(ch, data);                             //low length 값 전송
+  check_sum ^= data;                              //low length 체크섬 계산
+
+  data = (p_cmd->tx_packet.length >> 8) & 0xFF;   //high length값을 변수에 저장
+  cmdPutch(ch, data);                             //high length값 전송
+  check_sum ^= data;                              //high length값 체크섬 계산
+
+  //data length 식별됬다면 data를 전송한다.
+  for(i=0;i<p_cmd->tx_packet.length && i<CMD_MAX_DATA_LENGTH;i++)
+  {
+    cmdPutch(ch, p_cmd->tx_packet.data[i]);   //tx packet의 data를 바이트 단위로 전송
+    check_sum ^= p_cmd->tx_packet.data[i];   //tx packet의 data를 체크섬 계산
+  }
+
+  //data 전소을 모두 수행했다면
+  //check sum.값을 전송한다.
+  cmdPutch(ch, check_sum);
+
+  //etx packet 데이터를 전송한다.
+  cmdPutch(ch, CMD_ETX);
+}
+
+/*
+ * cmd packet 전송 함수
+ */
+void  cmdSendCmd(cmd_t *p_cmd, uint8_t cmd, uint8_t *p_data, uint32_t length)
+{
+  uint8_t i;
+  uint8_t ch;
+  uint8_t check_sum = 0;
+  uint8_t data;
+
+  p_cmd->ch = ch;
+
+  p_cmd->tx_packet.cmd = cmd;                       //tx packe cmd에 입력받은 cmd저자ㅣㅇ
+  p_cmd->tx_packet.option = 0;                      //tx packet의 option 초기화
+
+  if(p_data != NULL)                                //송신할 data 포인터가 NULL이 아니라면
+  {
+    for(i=0;i<length;i++)                           //송신할 데이터 길이만큼
+    {
+      p_cmd->tx_packet.data[i] = p_data[i];         //tx packet data를 전송한다.
+    }
+  }
+
+  p_cmd->tx_packet.length = length;                 //송신할 data의 길이를 tx packet의 length에 저장한다.
+
+
+  cmdPutch(ch, CMD_STX);                            //stx 전송
+  cmdPutch(ch, p_cmd->tx_packet.cmd);               //tx packet cmd 전송
+  check_sum ^= p_cmd->tx_packet.cmd;                //check sum 계산 시작
+
+  cmdPutch(ch, p_cmd->tx_packet.option);            //option 바이트 전송
+  check_sum ^= p_cmd->tx_packet.option;             //option 바이트 체크섬 계산
+
+  data = p_cmd->tx_packet.length && 0xFF;           //length low byte를 data변수에 저장
+  cmdPutch(ch, data);                               //length low byte 전송
+  check_sum ^= data;                                //length low byte값 체크섬 계산
+  data = (p_cmd->tx_packet.length >> 8) & 0xFF;      //length high byte data변수에 저장
+  cmdPutch(ch, data);                               //length high byte 전송
+  check_sum ^= data;                                //length high byte 체크섬 계산
+
+  //길이만큰 data 송신한다.
+  for(i=0;i<p_cmd->tx_packet.length && i<CMD_MAX_DATA_LENGTH; i++)
+  {
+    cmdPutch(ch, p_cmd->tx_packet.data[i]);         //length만큼 data 송신
+    check_sum ^= p_cmd->tx_packet.data[i];          //바이트 단위로 전송되는 data 체크섬 계산
+  }
+
+  cmdPutch(ch, check_sum);                          //체크섬 값을 송신한다.
+  cmdPutch(ch, CMD_ETX);                            //etx 패킷을 송신한다. //패킷의 종료
+
+}
+
 /*
  * cmd 수신 후 응답전송 함수
  */
-bool cmdSendCmdRxResp(cmd_t *p_cmd, uint8_t cmd, uint8_t *p_data, uint32_t length, uint32_t time_out);
+bool cmdSendCmdRxResp(cmd_t *p_cmd, uint8_t cmd, uint8_t *p_data, uint32_t length, uint32_t time_out)
+{
+  bool ret          = true;
+  uint8_t err_code  = 0;
+  uint32_t time_pre;
+
+
+  cmdSendCmd(p_cmd, cmd, p_data, length);
+
+  time_pre = millis();            //경과시간을 알기위한 목적의 변수
+
+  while(1)
+  {
+    if(cmdReceivePacket(p_cmd) == true)           //수신패킷을 이상없이 수신했음
+    {
+      err_code = p_cmd->rx_packetr.error;         //수신패킷에서 error값을 로컬 변수에 저장
+      break;
+    }
+
+    if(millis()-time_pre < time_out)            //타임아웃 시간이 경과했다면
+    {
+      p_cmd->rx_packetr.error = ERR_TIMEOUT;    //rx packet error값에 에러코드 저장한다.(ERR_TIMEOUT)
+      err_code = ERR_TIMEOUT;
+      break;
+    }
+  }
+
+  if(err_code != 0)
+  {
+    ret = false;
+  }
+
+
+
+  return ret;
+}
+

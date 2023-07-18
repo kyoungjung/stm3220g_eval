@@ -1,0 +1,6 @@
+../src/hw/deiver/flash.c:45:6:flashInSector	48	static
+../src/hw/deiver/flash.c:79:6:flashInit	16	static
+../src/hw/deiver/flash.c:90:6:flashErase	56	static
+../src/hw/deiver/flash.c:140:6:flashWrite	48	static
+../src/hw/deiver/flash.c:167:6:flashRead	40	static
+../src/hw/deiver/flash.c:184:6:cliFlash	56	static
