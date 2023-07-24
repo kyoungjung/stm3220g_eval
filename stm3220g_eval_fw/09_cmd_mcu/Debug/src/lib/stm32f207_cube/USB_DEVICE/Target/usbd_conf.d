@@ -37,6 +37,7 @@ src/lib/stm32f207_cube/USB_DEVICE/Target/usbd_conf.o: \
  D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/hw/hw.h \
  D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/hw/hw_def.h \
  D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/def.h \
+ D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/def_err.h \
  D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/bsp/bsp.h \
  D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/inc/led.h \
  D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/hw/hw_def.h \
@@ -89,6 +90,7 @@ D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/ap/ap.h:
 D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/hw/hw.h:
 D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/hw/hw_def.h:
 D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/def.h:
+D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/def_err.h:
 D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/bsp/bsp.h:
 D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/inc/led.h:
 D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/hw/hw_def.h:

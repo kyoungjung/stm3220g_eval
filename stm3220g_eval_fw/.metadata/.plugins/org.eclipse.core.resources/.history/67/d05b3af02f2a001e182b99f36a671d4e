@@ -1,0 +1,53 @@
+/*
+ * ap.c
+ *
+ *  Created on: 2023. 4. 12.
+ *      Author: kjkim
+ */
+
+
+#include "ap.h"
+#include "cmd.h"
+
+#define BOOT_CMD_READ_VERSION           0x00
+
+void mcuLoop(void);
+void pcLoop(void);
+
+cmd_t     cmd_mcu;
+cmd_t     cmd_pc;
+
+void apInit(void)
+{
+  cmdifOpen(_DEF_UART2, 115200);
+  cmdInit(&cmd_mcu);
+}
+
+void apMain(void)
+{
+  while(1)
+  {
+
+  }
+}
+
+
+
+void mcuLoop(void)
+{
+  uint32_t addr;
+  uint32_t data;
+
+  if(cmdReceivePacket(&cmd_mcu) == true)
+  {
+    switch(cmd_mcu->rx_packetr.cmd)
+    {
+      case
+    }
+  }
+}
+
+void pcLoop(void)
+{
+
+}

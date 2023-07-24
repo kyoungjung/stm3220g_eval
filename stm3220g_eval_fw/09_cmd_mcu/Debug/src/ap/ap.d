@@ -2,6 +2,7 @@ src/ap/ap.o: ../src/ap/ap.c ../src/ap/ap.h \
  D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/hw/hw.h \
  D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/hw/hw_def.h \
  D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/def.h \
+ D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/def_err.h \
  D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/bsp/bsp.h \
  D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/lib/stm32f207_cube/Drivers/STM32F2xx_HAL_Driver/Inc/stm32f2xx_hal.h \
  D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/bsp/stm32f2xx_hal_conf.h \
@@ -41,11 +42,13 @@ src/ap/ap.o: ../src/ap/ap.c ../src/ap/ap.h \
  D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/inc/flash.h \
  D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/inc/button.h \
  D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/inc/hwtimer.h \
- D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/inc/cmdif.h
+ D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/inc/cmdif.h \
+ D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/inc/cmd.h
 ../src/ap/ap.h:
 D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/hw/hw.h:
 D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/hw/hw_def.h:
 D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/def.h:
+D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/def_err.h:
 D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/bsp/bsp.h:
 D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/lib/stm32f207_cube/Drivers/STM32F2xx_HAL_Driver/Inc/stm32f2xx_hal.h:
 D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/bsp/stm32f2xx_hal_conf.h:
@@ -86,3 +89,4 @@ D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/inc/flash.h:
 D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/inc/button.h:
 D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/inc/hwtimer.h:
 D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/inc/cmdif.h:
+D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/inc/cmd.h:

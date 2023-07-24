@@ -218,7 +218,7 @@ void DMA1_Stream1_IRQHandler(void)
 /**
   * @brief This function handles TIM4 global interrupt.
 
-/**
+/*
   * @brief This function handles USART3 global interrupt.
   */
 void USART3_IRQHandler(void)

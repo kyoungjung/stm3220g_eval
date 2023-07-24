@@ -1,6 +1,7 @@
 src/hw/deiver/cmd.o: ../src/hw/deiver/cmd.c \
  D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/inc/cmd.h \
  D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/def.h \
+ D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/def_err.h \
  D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/hw/hw.h \
  D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/hw/hw_def.h \
  D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/bsp/bsp.h \
@@ -45,6 +46,7 @@ src/hw/deiver/cmd.o: ../src/hw/deiver/cmd.c \
  D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/inc/cmdif.h
 D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/inc/cmd.h:
 D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/def.h:
+D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/def_err.h:
 D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/hw/hw.h:
 D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/hw/hw_def.h:
 D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/bsp/bsp.h:

@@ -30,6 +30,7 @@ src/bsp/bsp.o: ../src/bsp/bsp.c ../src/bsp/bsp.h \
  D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/lib/stm32f207_cube/Drivers/STM32F2xx_HAL_Driver/Inc/stm32f2xx_ll_usb.h \
  D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/lib/stm32f207_cube/Drivers/STM32F2xx_HAL_Driver/Inc/stm32f2xx_hal_pcd_ex.h \
  D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/def.h \
+ D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/def_err.h \
  D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/lib/stm32f207_cube/USB_DEVICE/App/usb_device.h \
  D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/lib/stm32f207_cube/Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h \
  D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/lib/stm32f207_cube/USB_DEVICE/Target/usbd_conf.h \
@@ -79,6 +80,7 @@ D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/lib/stm32f207_cube/Drivers/
 D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/lib/stm32f207_cube/Drivers/STM32F2xx_HAL_Driver/Inc/stm32f2xx_ll_usb.h:
 D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/lib/stm32f207_cube/Drivers/STM32F2xx_HAL_Driver/Inc/stm32f2xx_hal_pcd_ex.h:
 D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/def.h:
+D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/common/def_err.h:
 D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/lib/stm32f207_cube/USB_DEVICE/App/usb_device.h:
 D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/lib/stm32f207_cube/Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h:
 D:/git/stm3220g_eval/stm3220g_eval_fw/09_cmd_mcu/src/lib/stm32f207_cube/USB_DEVICE/Target/usbd_conf.h:

@@ -42,7 +42,7 @@ typedef struct
    *  rx, tx 패킷 구조체 변수 선언
    */
   cmd_packet_t  tx_packet;  //tx패킷 구조체 변수 선언
-  cmd_packet_t  rx_packetr; //rx패킷 구조체 변수 선언
+  cmd_packet_t  rx_packet; //rx패킷 구조체 변수 선언
 }cmd_t;
 
 
@@ -53,7 +53,7 @@ void  cmdInit(cmd_t *p_cmd);
 /*
  * cmd 통신시작
  */
-void  cmdBegin(cmd_t *p_cmd, uint8_t ch, uint32_t baud);
+bool  cmdBegin(cmd_t *p_cmd, uint8_t ch, uint32_t baud);
 /*
  * 패킷 수신 함수
  */

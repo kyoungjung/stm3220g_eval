@@ -1,0 +1,112 @@
+/*
+ * ap.c
+ *
+ *  Created on: 2023. 4. 12.
+ *      Author: kjkim
+ */
+
+
+#include "ap.h"
+#include "cmd.h"
+
+#define BOOT_CMD_READ_VERSION           0x00
+
+void mcuLoop(void);
+void pcLoop(void);
+
+cmd_t     cmd_mcu;
+cmd_t     cmd_pc;
+
+void apInit(void)
+{
+  //cmdifOpen(_DEF_UART2, 115200);
+  uartOpen(_DEF_UART1, 115200);
+  uartOpen(_DEF_UART2, 115200);
+
+  cmdInit(&cmd_mcu);
+  cmdBegin(&cmd_mcu, _DEF_UART2, 115200);
+
+  cmdInit(&cmd_pc);
+  cmdBegin(&cmd_pc, _DEF_UART2, 115200);
+}
+
+void apMain(void)
+{
+  uint32_t pre_time;
+
+  pre_time = millis();
+  while(1)
+  {
+    if(millis() - pre_time > 500)
+    {
+      pre_time = millis();
+      ledToggle(_DEF_LED1);
+    }
+    mcuLoop();
+    pcLoop();
+  }
+}
+
+
+
+void mcuLoop(void)
+{
+  uint32_t addr;
+  uint32_t data;
+
+  if(cmdReceivePacket(&cmd_mcu) == true)  // 수신 패킷이 있다면
+  {
+    switch(cmd_mcu.rx_packet.cmd)       //수신패킷 프로토콜에서 cmd를 체크한다.
+    {
+      case BOOT_CMD_READ_VERSION:         //수신패킷의 cmd가 BOOT_CMD_READ_VERSION아면
+                                          //addr를 파싱하고
+        addr = cmd_mcu.rx_packet.data[0]  << 0;
+        addr |= cmd_mcu.rx_packet.data[1] << 8;
+        addr |= cmd_mcu.rx_packet.data[2] << 16;
+        addr |= cmd_mcu.rx_packet.data[3] << 24;
+                                          //data를 파싱한다.
+        data = cmd_mcu.rx_packet.data[4]  << 0;
+        data |= cmd_mcu.rx_packet.data[5] << 8;
+        data |= cmd_mcu.rx_packet.data[6] << 16;
+        data |= cmd_mcu.rx_packet.data[7] << 24;
+
+        //수신한 addr과 data를 화면에 프린트 한다.
+        uartPrintf(_DEF_UART1, "mcu cmd received : addr %d, data %d\r\n", addr, data);
+        break;
+    }
+  }
+}
+
+void pcLoop(void)
+{
+  static uint32_t addr = 1024;
+  static uint32_t data = 0;
+
+  uint8_t ch;
+
+  if(uartAvailable(_DEF_UART1) > 0) //pc로부터 입력이 있다면
+  {
+    ch = uartRead(_DEF_UART1);      //입력되는 값을 읽어서 ch변수에 저장
+
+    if(ch == '0')                   //'0' 문자가 입력됬다면
+    {
+      //little endian
+      cmd_pc.tx_packet.data[0]  = addr >> 0;  //송신패킷의 data 4바이트에 addr값을 저장
+      cmd_pc.tx_packet.data[1] = addr >> 8;
+      cmd_pc.tx_packet.data[2] = addr >> 16;
+      cmd_pc.tx_packet.data[3] = addr >> 24;
+
+      cmd_pc.tx_packet.data[4]  = data >> 0;  //송신패킷의 data 4바이트에 data값을 저장
+      cmd_pc.tx_packet.data[5] = data >> 8;
+      cmd_pc.tx_packet.data[6] = data >> 16;
+      cmd_pc.tx_packet.data[7] = data >> 24;
+
+      //송신패킷에 BOOT_CMD_READ_VERSION cmd로 데이터 8바이트를 실어서 송신한다.
+      cmdSendCmd(&cmd_pc, BOOT_CMD_READ_VERSION, cmd_pc.tx_packet.data, 8);
+      //하나의 패킷을 송신한 후 data를 1 증가시킨다.
+      //송신할때마다 1증가된 data가 전송된다.
+      data++;
+    }
+  }
+
+}

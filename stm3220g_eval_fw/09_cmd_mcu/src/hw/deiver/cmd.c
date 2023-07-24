@@ -35,13 +35,15 @@ void  cmdInit(cmd_t *p_cmd)
   p_cmd->state  = CMD_STATE_WAIT_STX;   //초기상태는 시작 문자를 기다리는 상태
 
   p_cmd->tx_packet.error  = 0;          //tx 패킷 에러상태변수 초기화
-  p_cmd->rx_packetr.error = 0;          //rx 패킷 에러상태변수 초기화
+  p_cmd->rx_packet.error = 0;          //rx 패킷 에러상태변수 초기화
 }
 /*
  * cmd 통신시작
  */
-void  cmdBegin(cmd_t *p_cmd, uint8_t ch, uint32_t baud)
+bool  cmdBegin(cmd_t *p_cmd, uint8_t ch, uint32_t baud)
 {
+  bool ret = false;
+
   p_cmd->ch     = ch;                   //cmd 사용할 통신 채널 입력 받아서 구조체 멤버변수에 저장
   p_cmd->baud   = baud;                 //baud(통신속도) 입력 받아서 구조체 멤버번수에 저장
   p_cmd->init   = true;
@@ -50,7 +52,9 @@ void  cmdBegin(cmd_t *p_cmd, uint8_t ch, uint32_t baud)
   p_cmd->save_time[0] = millis();       //cmdBegin 수행 후 경과된 시간정보 저장
   p_cmd->save_time[1] = millis();       //cmdBegin 수행 후 경과된 시간정보 저장
 
-  return uartOpen(ch, baud);            //입력받은 통신채널과 속도로 통신포트를 연다.
+  ret = uartOpen(ch, baud);            //입력받은 통신채널과 속도로 통신포트를 연다.
+
+  return ret;
 }
 
 /*
@@ -98,8 +102,8 @@ bool  cmdReceivePacket(cmd_t *p_cmd)
       if(ch == CMD_STX)
       {
         p_cmd->state = CMD_STATE_WAIT_CMD;  //cmd 기다리는 상태로 변경
-        p_cmd->rx_packetr.check_sum = 0;    //rx packet 체크섬 변수 0으로 초기화
-        p_cmd->rx_packetr.length    = 0;    //rx packet 길이변수 초기화
+        p_cmd->rx_packet.check_sum = 0;    //rx packet 체크섬 변수 0으로 초기화
+        p_cmd->rx_packet.length    = 0;    //rx packet 길이변수 초기화
         temp_length = 0;
 
       }
@@ -107,38 +111,38 @@ bool  cmdReceivePacket(cmd_t *p_cmd)
 
     //명령을 기다리는 상태
     case CMD_STATE_WAIT_CMD :
-      p_cmd->rx_packetr.cmd = ch;                   //cmd 패킷 받아서 저장
-      p_cmd->rx_packetr.check_sum ^= ch;            //cmd 체크섬 계산
+      p_cmd->rx_packet.cmd = ch;                   //cmd 패킷 받아서 저장
+      p_cmd->rx_packet.check_sum ^= ch;            //cmd 체크섬 계산
       p_cmd->state = CMD_STATE_WAIT_OPTION_ERROR;   //option error 기다리는 상태로 변경
       break;
 
     //option error 상태를 기다리는 상태
     case CMD_STATE_WAIT_OPTION_ERROR :
-      p_cmd->rx_packetr.option = ch;
-      p_cmd->rx_packetr.error  = ch;
-      p_cmd->rx_packetr.check_sum ^= ch;            //option error 체크섬 계산
+      p_cmd->rx_packet.option = ch;
+      p_cmd->rx_packet.error  = ch;
+      p_cmd->rx_packet.check_sum ^= ch;            //option error 체크섬 계산
       p_cmd->state = CMD_STATE_WAIT_LENGTH_L;       //length low 수신대기 상태로 변경
       break;
 
     //length_l를 기다리는 상태
     case CMD_STATE_WAIT_LENGTH_L :
-      p_cmd->rx_packetr.length = ch;
-      p_cmd->rx_packetr.check_sum ^= ch;
+      p_cmd->rx_packet.length = ch;
+      p_cmd->rx_packet.check_sum ^= ch;
       p_cmd->state = CMD_STATE_WAIT_LENGTH_H;
       break;
 
     //length_h를 기다리는 상태
     case CMD_STATE_WAIT_LENGTH_H :
       temp_length = ch;
-      p_cmd->rx_packetr.length |= (temp_length << 8) & 0xFF00;
-      p_cmd->rx_packetr.check_sum ^= ch;
+      p_cmd->rx_packet.length |= (temp_length << 8) & 0xFF00;
+      p_cmd->rx_packet.check_sum ^= ch;
       p_cmd->state = CMD_STATE_WAIT_LENGTH_H;
 
-      if(p_cmd->rx_packetr.length <= CMD_MAX_DATA_LENGTH) //rx packet 길이가 데이터 최대길이 이하이면
+      if(p_cmd->rx_packet.length <= CMD_MAX_DATA_LENGTH) //rx packet 길이가 데이터 최대길이 이하이면
       {
-        if(p_cmd->rx_packetr.length > 0)  //rx packet이 존재한다면(rx packet가 정상)
+        if(p_cmd->rx_packet.length > 0)  //rx packet이 존재한다면(rx packet가 정상)
         {
-          p_cmd->rx_packetr.index = 0;          //data 대기하는 상태에서 사용할 index 변수 초기화
+          p_cmd->rx_packet.index = 0;          //data 대기하는 상태에서 사용할 index 변수 초기화
           p_cmd->state = CMD_STATE_WAIT_DATA;   //data 수신대기 상태로 변경
         }
         else
@@ -158,15 +162,15 @@ bool  cmdReceivePacket(cmd_t *p_cmd)
 
     //data를 기다리는 상태
     case CMD_STATE_WAIT_DATA :
-      index = p_cmd->rx_packetr.index;    //위 상태에서 초기화환 index 변수를 지역변수 index에 저장
-      p_cmd->rx_packetr.check_sum ^= ch;  //입력된 data를 체크섬 계산 처리한다.
-      p_cmd->rx_packetr.data[index] = ch; //입력된 data를 rx packet 수신버퍼에 저장한다.
+      index = p_cmd->rx_packet.index;    //위 상태에서 초기화환 index 변수를 지역변수 index에 저장
+      p_cmd->rx_packet.check_sum ^= ch;  //입력된 data를 체크섬 계산 처리한다.
+      p_cmd->rx_packet.data[index] = ch; //입력된 data를 rx packet 수신버퍼에 저장한다.
 
-      p_cmd->rx_packetr.index++;          //index 1 증가 시킨다.
+      p_cmd->rx_packet.index++;          //index 1 증가 시킨다.
                                           //rx packet length(길이) 만큼 data를 계속 수신하여 수신버퍼에 입력한다.
                                           //위 과정을 데이터를 모두 받을때까지 반복동작한다.
 
-      if(p_cmd->rx_packetr.index >= p_cmd->rx_packetr.length) //데이터를 모두 받았다면
+      if(p_cmd->rx_packet.index >= p_cmd->rx_packet.length) //데이터를 모두 받았다면
       {
         //data 수신이 완료됬으므로, 체크섬 수신 대기상태로 넘어간다.
         p_cmd->state = CMD_STATE_WAIT_CHECKSUM;
@@ -176,7 +180,7 @@ bool  cmdReceivePacket(cmd_t *p_cmd)
 
     //check sum을 기다리는 상태
     case CMD_STATE_WAIT_CHECKSUM :
-      p_cmd->rx_packetr.check_sum_recv = ch;    //check_sum_recv변수에 상대방에서 보낸 체크섬값을 저장한다.
+      p_cmd->rx_packet.check_sum_recv = ch;    //check_sum_recv변수에 상대방에서 보낸 체크섬값을 저장한다.
       p_cmd->state = CMD_STATE_WAIT_ETX;        //etx 수신대기 상태로 넘어간다.
       break;
 
@@ -184,7 +188,7 @@ bool  cmdReceivePacket(cmd_t *p_cmd)
     case CMD_STATE_WAIT_ETX :
       if(ch == CMD_ETX)
       {
-        if(p_cmd->rx_packetr.check_sum_recv == p_cmd->rx_packetr.check_sum)
+        if(p_cmd->rx_packet.check_sum_recv == p_cmd->rx_packet.check_sum)
         {
           //상대방에서 계산해서 보낸 체크섬값(check_sum_recv)과 이곳에서 계산한 체크섬값(check_sum)이 같으므로
           //true를 반환한다.
@@ -214,7 +218,7 @@ void cmdSendResp(cmd_t *p_cmd, uint8_t err_code, uint8_t *p_data, uint32_t lengt
 
   //수신된 cmd를 다시 응답으로 송신해야 하므로
   //tx packet 의 cmd 변수에 수신된 cmd를 저장한다.
-  p_cmd->tx_packet.cmd = p_cmd->rx_packetr.cmd;
+  p_cmd->tx_packet.cmd = p_cmd->rx_packet.cmd;
 
   //수신패킷에 따라 처리된 결과(에러코드)를 tx packet의 에러 변수에 저장한다.
   p_cmd->tx_packet.error = err_code;
@@ -222,7 +226,7 @@ void cmdSendResp(cmd_t *p_cmd, uint8_t err_code, uint8_t *p_data, uint32_t lengt
   if(p_data != NULL)
   {
     //수신된 패킷 데이터 길이만큼 데이터를 tx packet의 data버퍼에 저장한다.
-    for(i=i;i<length;i++)
+    for(i=0;i<length;i++)
     {
       p_cmd->tx_packet.data[i] = p_data[i];
     }
@@ -266,11 +270,11 @@ void cmdSendResp(cmd_t *p_cmd, uint8_t err_code, uint8_t *p_data, uint32_t lengt
 void  cmdSendCmd(cmd_t *p_cmd, uint8_t cmd, uint8_t *p_data, uint32_t length)
 {
   uint8_t i;
-  uint8_t ch;
+  uint8_t ch = 0;
   uint8_t check_sum = 0;
   uint8_t data;
 
-  p_cmd->ch = ch;
+  ch = p_cmd->ch;
 
   p_cmd->tx_packet.cmd = cmd;                       //tx packe cmd에 입력받은 cmd저자ㅣㅇ
   p_cmd->tx_packet.option = 0;                      //tx packet의 option 초기화
@@ -330,13 +334,13 @@ bool cmdSendCmdRxResp(cmd_t *p_cmd, uint8_t cmd, uint8_t *p_data, uint32_t lengt
   {
     if(cmdReceivePacket(p_cmd) == true)           //수신패킷을 이상없이 수신했음
     {
-      err_code = p_cmd->rx_packetr.error;         //수신패킷에서 error값을 로컬 변수에 저장
+      err_code = p_cmd->rx_packet.error;         //수신패킷에서 error값을 로컬 변수에 저장
       break;
     }
 
     if(millis()-time_pre < time_out)            //타임아웃 시간이 경과했다면
     {
-      p_cmd->rx_packetr.error = ERR_TIMEOUT;    //rx packet error값에 에러코드 저장한다.(ERR_TIMEOUT)
+      p_cmd->rx_packet.error = ERR_TIMEOUT;    //rx packet error값에 에러코드 저장한다.(ERR_TIMEOUT)
       err_code = ERR_TIMEOUT;
       break;
     }

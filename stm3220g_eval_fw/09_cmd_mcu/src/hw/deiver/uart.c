@@ -14,6 +14,7 @@ static bool is_open[UART_MAX_CH];
 
 static qbuffer_t    qbuffer[UART_MAX_CH];
 static uint8_t rx_buf[256];
+static uint8_t rx_data[256];
 //static uint8_t rx_data[UART_MAX_CH];
 
 UART_HandleTypeDef  huart3;
@@ -125,9 +126,11 @@ uint32_t uartAvailable(uint8_t ch)
 #if 0
       ret = qbufferAvailable(&qbuffer[ch]);
 #endif
+#if 1
       //                           256 - 256...265...254...
       qbuffer[ch].in = qbuffer[ch].len - hdma_usart3_rx.Instance->NDTR;
       ret = qbufferAvailable(&qbuffer[ch]);
+#endif
       break;
 
     default:break;
