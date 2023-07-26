@@ -20,6 +20,7 @@ org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:07_hw_timer\ Debug/activeLaunch
 org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:08_cmd_if\ Debug/activeLaunchMode=run
 org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:08_cmd_if\ Debug/activeLaunchTarget=null\:---
 org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:09_cmd_mcu\ Debug/activeLaunchMode=debug
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:09_cmd_mcu\ Debug/activeLaunchTarget=null\:---
 org.eclipse.launchbar.core.descriptorType.default\:01_led\ Debug/activeLaunchMode=debug
 org.eclipse.launchbar.core.descriptorType.default\:01_led\ Debug/activeLaunchTarget=org.eclipse.launchbar.core.launchTargetType.local\:Local
 org.eclipse.launchbar.core.descriptorType.default\:02_usb_cdc\ Debug/activeLaunchMode=debug

@@ -297,7 +297,7 @@ void  cmdSendCmd(cmd_t *p_cmd, uint8_t cmd, uint8_t *p_data, uint32_t length)
   cmdPutch(ch, p_cmd->tx_packet.option);            //option 바이트 전송
   check_sum ^= p_cmd->tx_packet.option;             //option 바이트 체크섬 계산
 
-  data = p_cmd->tx_packet.length && 0xFF;           //length low byte를 data변수에 저장
+  data = p_cmd->tx_packet.length & 0xFF;           //length low byte를 data변수에 저장
   cmdPutch(ch, data);                               //length low byte 전송
   check_sum ^= data;                                //length low byte값 체크섬 계산
   data = (p_cmd->tx_packet.length >> 8) & 0xFF;      //length high byte data변수에 저장
