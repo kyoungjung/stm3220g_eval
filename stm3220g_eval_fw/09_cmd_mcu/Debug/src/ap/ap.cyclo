@@ -1,4 +1,4 @@
 ap.c:20:6:apInit	1
-ap.c:32:6:apMain	2
-ap.c:53:6:mcuLoop	3
-ap.c:81:6:pcLoop	3
+ap.c:34:6:apMain	2
+ap.c:55:6:mcuLoop	3
+ap.c:83:6:pcLoop	3
