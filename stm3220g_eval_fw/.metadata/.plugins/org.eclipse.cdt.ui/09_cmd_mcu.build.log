@@ -1,10 +1,10 @@
-22:32:33 **** Incremental Build of configuration Debug for project 09_cmd_mcu ****
+01:22:48 **** Incremental Build of configuration Debug for project 09_cmd_mcu ****
 make all 
 arm-none-eabi-size   09_cmd_mcu.elf 
    text	   data	    bss	    dec	    hex	filename
-  66608	   1056	  17040	  84704	  14ae0	09_cmd_mcu.elf
+  66624	   1056	  17040	  84720	  14af0	09_cmd_mcu.elf
 Finished building: default.size.stdout
  
 
-22:32:34 Build Finished. 0 errors, 0 warnings. (took 449ms)
+01:22:48 Build Finished. 0 errors, 0 warnings. (took 417ms)
 
