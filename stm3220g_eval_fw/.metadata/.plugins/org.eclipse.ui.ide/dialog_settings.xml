@@ -7,6 +7,7 @@
 		<item key="WizardProjectsImportPage.STORE_CLOSE_CREATED_PROJECTS_ID" value="false"/>
 		<item key="WizardProjectsImportPage.STORE_HIDE_CONFLICTING_PROJECTS_ID" value="false"/>
 		<list key="WizardProjectsImportPage.STORE_DIRECTORIES">
+			<item value="D:\git\stm3220g_eval\stm3220g_eval_fw\03_uart_loopback"/>
 			<item value="D:\git\stm3220g_eval\stm3220g_eval_fw\09_cmd_mcu"/>
 			<item value="D:\git\stm3220g_eval\stm3220g_eval_fw\08_cmd_if"/>
 			<item value="D:\wep_Driver\32_STM32\07_STM3220G_EVAL\work5\stm3220g_eval_fw\07_hw_timer"/>

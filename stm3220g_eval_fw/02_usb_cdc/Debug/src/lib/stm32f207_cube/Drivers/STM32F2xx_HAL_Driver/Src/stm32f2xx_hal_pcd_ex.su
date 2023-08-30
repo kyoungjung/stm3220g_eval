@@ -1,0 +1,4 @@
+../src/lib/stm32f207_cube/Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_pcd_ex.c:71:19:HAL_PCDEx_SetTxFiFo	24	static
+../src/lib/stm32f207_cube/Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_pcd_ex.c:113:19:HAL_PCDEx_SetRxFiFo	16	static
+../src/lib/stm32f207_cube/Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_pcd_ex.c:127:13:HAL_PCDEx_LPM_Callback	16	static
+../src/lib/stm32f207_cube/Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_pcd_ex.c:144:13:HAL_PCDEx_BCD_Callback	16	static

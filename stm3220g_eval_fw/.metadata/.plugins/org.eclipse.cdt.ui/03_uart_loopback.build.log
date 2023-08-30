@@ -1,0 +1,10 @@
+23:38:54 **** Incremental Build of configuration Debug for project 03_uart_loopback ****
+make all 
+arm-none-eabi-size   03_uart_loopback.elf 
+   text	   data	    bss	    dec	    hex	filename
+  56996	    900	   6868	  64764	   fcfc	03_uart_loopback.elf
+Finished building: default.size.stdout
+ 
+
+23:38:54 Build Finished. 0 errors, 0 warnings. (took 480ms)
+

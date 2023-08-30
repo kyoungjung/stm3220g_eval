@@ -1,0 +1,4 @@
+../src/hw/deiver/led.c:28:6:ledInit	48	static
+../src/hw/deiver/led.c:54:6:ledOn	16	static
+../src/hw/deiver/led.c:59:6:ledOff	16	static
+../src/hw/deiver/led.c:64:6:ledToggle	16	static
