@@ -34,15 +34,15 @@ void apMain(void)
     {
       data = uartRead(_DEF_UART1);
 
-      uartPrintf(_DEF_UART1, "uart ch1 : received!!\r\n");
-      uartPrintf(_DEF_UART2, "uart ch2 tx : 0x%X\r\n", data);
+      uartPrintf(_DEF_UART1, "uart ch1 : received!!\n");
+      uartPrintf(_DEF_UART2, "uart ch2 tx : 0x%X\n", data);
     }
 
     if(uartAvailable(_DEF_UART2) > 0)
     {
       data = uartRead(_DEF_UART2);
 
-      uartPrintf(_DEF_UART1, "%c\r\n", data);
+      uartPrintf(_DEF_UART1, "%c\n", data);
     }
   }
 }

@@ -102,9 +102,6 @@ bool uartOpen(uint8_t ch, uint32_t baud)
           qbuffer[ch].out = qbuffer[ch].in;
         }
       }
-
-
-
       break;
   }
 
