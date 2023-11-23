@@ -1,4 +1,0 @@
-../src/ap/ap.c:20:6:apInit	8	static
-../src/ap/ap.c:34:6:apMain	16	static
-../src/ap/ap.c:55:6:mcuLoop	16	static
-../src/ap/ap.c:83:6:pcLoop	16	static

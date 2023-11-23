@@ -1,6 +1,0 @@
-qbuffer.c:12:6:qbufferInit	1
-qbuffer.c:16:6:qbufferCreate	1
-qbuffer.c:27:6:qbufferWrite	4
-qbuffer.c:55:6:qbufferRead	4
-qbuffer.c:80:10:qbufferAvailable	1
-qbuffer.c:88:6:qbufferFlush	1

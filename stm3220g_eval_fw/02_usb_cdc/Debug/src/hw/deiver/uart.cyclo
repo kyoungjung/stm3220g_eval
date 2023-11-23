@@ -1,7 +1,0 @@
-uart.c:21:6:uartInit	2
-uart.c:33:6:uartOpen	2
-uart.c:51:10:uartAvailable	3
-uart.c:70:9:uartRead	3
-uart.c:89:10:uartWrite	3
-uart.c:107:10:uartPrintf	1
-uart.c:124:10:uartGetBaud	3

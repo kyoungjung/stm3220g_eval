@@ -1,7 +1,0 @@
-../src/hw/deiver/uart.c:21:6:uartInit	16	static
-../src/hw/deiver/uart.c:33:6:uartOpen	24	static
-../src/hw/deiver/uart.c:51:10:uartAvailable	24	static
-../src/hw/deiver/uart.c:70:9:uartRead	24	static
-../src/hw/deiver/uart.c:89:10:uartWrite	32	static
-../src/hw/deiver/uart.c:107:10:uartPrintf	292	static
-../src/hw/deiver/uart.c:124:10:uartGetBaud	24	static
